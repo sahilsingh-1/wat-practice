@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CDS WAT Practice | Word Association Test</title>
-  <meta name="description" content="Practice Word Association Test (WAT) for CDS/SSB exam. 60 words in 15 seconds each with scoring and performance analysis." />
+  <title>SSB Practice | WAT & TAT</title>
+  <meta name="description" content="Practice Word Association Test (WAT) and Thematic Apperception Test (TAT) for CDS/SSB exam." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -19,10 +19,39 @@
   <!-- APP WRAPPER -->
   <div class="app" id="app">
 
-    <!-- ==================== HOME SCREEN ==================== -->
-    <div class="screen active" id="screen-home">
+    <!-- ==================== LANDING SCREEN ==================== -->
+    <div class="screen active" id="screen-landing">
       <div class="home-content">
         <div class="emblem-ring">
+          <div class="emblem-inner">
+            <svg viewBox="0 0 80 80" class="emblem-svg">
+              <polygon points="40,5 47,30 74,30 52,47 60,72 40,55 20,72 28,47 6,30 33,30" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+              <circle cx="40" cy="40" r="15" fill="none" stroke="#d4af37" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+        <div class="home-badge">SSB PREPARATION SUITE</div>
+        <h1 class="home-title">Psychological <span class="gold">Tests</span></h1>
+        <p class="home-desc" style="margin-bottom: 40px;">Select a module to begin your practice session.</p>
+
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn-module" id="btn-module-wat" onclick="showScreen('home-wat')" style="padding: 30px 40px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; cursor: pointer; color: white; transition: 0.3s; width: 250px;">
+            <h3 style="font-family: Orbitron; font-size: 2rem; color: #d4af37; margin-bottom: 10px;">WAT</h3>
+            <p style="font-family: 'Exo 2'; color: #8899aa;">Word Association Test<br>60 Words · 15s</p>
+          </button>
+          <button class="btn-module" id="btn-module-tat" onclick="showScreen('home-tat')" style="padding: 30px 40px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; cursor: pointer; color: white; transition: 0.3s; width: 250px;">
+            <h3 style="font-family: Orbitron; font-size: 2rem; color: #d4af37; margin-bottom: 10px;">TAT</h3>
+            <p style="font-family: 'Exo 2'; color: #8899aa;">Thematic Apperception Test<br>11 Pics + 1 Blank · 4m</p>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== HOME SCREEN (WAT) ==================== -->
+    <div class="screen" id="screen-home-wat">
+      <div class="home-content">
+        <button class="btn-back" onclick="showScreen('landing')" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8899aa; cursor: pointer; font-family: 'Exo 2'; font-size: 1rem;"><span style="margin-right:5px">←</span> Back</button>
+        <div class="emblem-ring" style="margin-top: 30px;">
           <div class="emblem-inner">
             <svg viewBox="0 0 80 80" class="emblem-svg">
               <polygon points="40,5 47,30 74,30 52,47 60,72 40,55 20,72 28,47 6,30 33,30" fill="none" stroke="#d4af37" stroke-width="1.5"/>
@@ -84,8 +113,75 @@
       </div>
     </div>
 
-    <!-- ==================== SESSION SCREEN ==================== -->
-    <div class="screen" id="screen-session">
+    <!-- ==================== HOME SCREEN (TAT) ==================== -->
+    <div class="screen" id="screen-home-tat">
+      <div class="home-content">
+        <button class="btn-back" onclick="showScreen('landing')" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8899aa; cursor: pointer; font-family: 'Exo 2'; font-size: 1rem;"><span style="margin-right:5px">←</span> Back</button>
+        <div class="emblem-ring" style="margin-top: 30px;">
+          <div class="emblem-inner">
+            <svg viewBox="0 0 80 80" class="emblem-svg">
+              <polygon points="40,5 47,30 74,30 52,47 60,72 40,55 20,72 28,47 6,30 33,30" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+              <circle cx="40" cy="40" r="15" fill="none" stroke="#d4af37" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+        <div class="home-badge">SSB PREPARATION SUITE</div>
+        <h1 class="home-title">TAT <span class="gold">Practice</span></h1>
+        <p class="home-subtitle">Thematic Apperception Test — CDS / SSB Edition</p>
+        <p class="home-desc">11 pictures + 1 blank · 30s view · 4m write</p>
+
+        <div class="home-stats" id="home-stats-tat">
+          <div class="stat-card">
+            <span class="stat-num" id="stat-sessions-val-tat">0</span>
+            <span class="stat-label">Sessions</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-best-val-tat">—</span>
+            <span class="stat-label">Best Score</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-avg-val-tat">—</span>
+            <span class="stat-label">Average</span>
+          </div>
+        </div>
+
+        <!-- File Upload Widget -->
+        <div class="upload-widget">
+          <div class="upload-dropzone" id="tat-upload-dropzone">
+            <span class="upload-icon">📂</span>
+            <span class="upload-label">Drop <strong>images</strong> for the session here, or <u>click to browse</u></span>
+            <input type="file" id="tat-file-input" accept="image/*" multiple style="display:none" />
+          </div>
+          <div class="upload-footer">
+            <span class="upload-badge" id="tat-upload-badge">No files loaded — using default pictures</span>
+            <button class="btn-clear-upload" id="btn-clear-tat-upload" style="display:none">✕ Clear</button>
+          </div>
+        </div>
+
+        <div class="home-actions">
+          <button class="btn-primary" id="btn-start-tat">
+            <span class="btn-icon">▶</span> Start Session
+          </button>
+          <button class="btn-secondary" id="btn-history-tat">
+            <span class="btn-icon">📊</span> History
+          </button>
+        </div>
+
+        <div class="home-rules">
+          <h3>How It Works</h3>
+          <div class="rules-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="rule-item"><span class="rule-num">01</span><span>11 pictures shown for 30s each</span></div>
+            <div class="rule-item"><span class="rule-num">02</span><span>4 minutes to write a story</span></div>
+            <div class="rule-item"><span class="rule-num">03</span><span>12th slide is blank</span></div>
+            <div class="rule-item"><span class="rule-num">04</span><span>Mark completed stories at the end</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== SESSION SCREEN (WAT) ==================== -->
+    <div class="screen" id="screen-session-wat">
       <!-- Top HUD -->
       <div class="session-hud">
         <div class="hud-left">
@@ -166,8 +262,78 @@
       </div>
     </div>
 
-    <!-- ==================== REVIEW SCREEN ==================== -->
-    <div class="screen" id="screen-review">
+
+    <!-- ==================== SESSION SCREEN (TAT) ==================== -->
+    <div class="screen" id="screen-session-tat">
+      <!-- Top HUD -->
+      <div class="session-hud">
+        <div class="hud-left">
+          <span class="hud-label">PICTURE</span>
+          <span class="hud-val" id="hud-tat-num">1 / 12</span>
+        </div>
+        <div class="hud-center">
+          <div class="timer-ring" id="timer-ring-tat">
+            <svg viewBox="0 0 120 120" class="timer-svg">
+              <circle cx="60" cy="60" r="54" class="timer-track"/>
+              <circle cx="60" cy="60" r="54" class="timer-progress" id="timer-progress-tat"/>
+            </svg>
+            <div class="timer-display">
+              <span id="timer-val-tat">30</span>
+              <span class="timer-unit" id="timer-unit-tat">sec</span>
+            </div>
+          </div>
+        </div>
+        <div class="hud-right">
+          <button class="btn-pause" id="btn-pause-tat" title="Pause">⏸</button>
+          <button class="btn-quit" id="btn-quit-tat" title="Quit">✕</button>
+        </div>
+      </div>
+
+      <!-- TAT Image Stage -->
+      <div class="tat-stage" id="tat-stage" style="display: flex; justify-content: center; align-items: center; height: calc(100vh - 150px); padding: 20px;">
+        <img id="tat-image" src="" alt="TAT" style="max-width: 100%; max-height: 100%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: contain; background: #000;" />
+        <div id="tat-blank-placeholder" style="display: none; width: 100%; height: 100%; background: #000; border-radius: 8px; border: 2px dashed rgba(212,175,55,0.3); justify-content: center; align-items: center; flex-direction: column;">
+            <span style="color: rgba(255,255,255,0.2); font-family: Orbitron; font-size: 2rem;">BLANK SLIDE</span>
+            <span style="color: rgba(255,255,255,0.1); font-family: 'Exo 2'; margin-top: 10px;">Picture #12</span>
+        </div>
+      </div>
+
+      <!-- Instruction Overlay (for "Start Writing" etc) -->
+      <div class="countdown-overlay hidden" id="tat-instruction-overlay" style="z-index: 100; background: rgba(0,0,0,1);">
+        <div class="countdown-content">
+          <h2 class="countdown-title" id="tat-instruction-text" style="font-size: 4rem;">Get Ready</h2>
+        </div>
+      </div>
+
+      <!-- Pause Modal -->
+      <div class="modal-overlay hidden" id="pause-modal-tat">
+        <div class="modal-box">
+          <div class="modal-icon">⏸</div>
+          <h2>TAT Paused</h2>
+          <div class="modal-actions">
+            <button class="btn-primary" id="btn-resume-tat">▶ Resume</button>
+            <button class="btn-danger" id="btn-quit-confirm-tat">⏹ End Session</button>
+            <button class="btn-discard" id="btn-discard-session-tat">✕ Discard</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Controls -->
+      <div class="session-bottom">
+        <button class="btn-focus" id="btn-focus-tat" title="Focus Mode">
+          <span>⛶</span> Focus Mode
+        </button>
+        <button class="btn-next" id="btn-next-tat">
+          Skip Picture <span>→</span>
+        </button>
+      </div>
+      
+      <!-- Focus Hint -->
+      <div id="tat-focus-hint" class="hidden" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: #8899aa; font-family: 'Exo 2'; background: rgba(0,0,0,0.6); padding: 5px 15px; border-radius: 20px; pointer-events: none; z-index: 1000;">Press <kbd style="background: #334455; padding: 2px 6px; border-radius: 4px; color: #fff;">Esc</kbd> to exit focus mode</div>
+    </div>
+
+    <!-- ==================== REVIEW SCREEN (WAT) ==================== -->
+    <div class="screen" id="screen-review-wat">
       <div class="review-header">
         <div class="review-badge">SESSION COMPLETE</div>
         <h2>Mark Your Attempts</h2>
@@ -199,8 +365,38 @@
       </div>
     </div>
 
-    <!-- ==================== ANALYSIS SCREEN ==================== -->
-    <div class="screen" id="screen-analysis">
+
+    <!-- ==================== REVIEW SCREEN (TAT) ==================== -->
+    <div class="screen" id="screen-review-tat">
+      <div class="review-header">
+        <div class="review-badge">SESSION COMPLETE</div>
+        <h2>Mark Completed Stories</h2>
+        <p>Check the pictures for which you completed a story</p>
+      </div>
+
+      <div class="review-grid" id="review-grid-tat">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="review-summary">
+        <div class="rs-stat">
+          <span class="rs-num" id="rs-attempted-tat">0</span>
+          <span class="rs-label">Completed</span>
+        </div>
+        <div class="rs-stat">
+          <span class="rs-num" id="rs-skipped-tat">12</span>
+          <span class="rs-label">Missed</span>
+        </div>
+      </div>
+
+      <div class="review-actions">
+        <button class="btn-secondary" id="btn-select-all-tat">Select All</button>
+        <button class="btn-primary" id="btn-submit-review-tat">Save Result</button>
+      </div>
+    </div>
+
+    <!-- ==================== ANALYSIS SCREEN (WAT) ==================== -->
+    <div class="screen" id="screen-analysis-wat">
       <div class="analysis-header">
         <div class="analysis-badge">PERFORMANCE ANALYSIS</div>
         <h2>Session Results</h2>
@@ -264,13 +460,25 @@
       </div>
     </div>
 
-    <!-- ==================== HISTORY SCREEN ==================== -->
-    <div class="screen" id="screen-history">
+
+    <!-- ==================== HISTORY SCREEN (WAT) ==================== -->
+    <div class="screen" id="screen-history-wat">
       <div class="history-header">
         <button class="btn-back" id="btn-back-history">← Back</button>
-        <h2>Session History</h2>
+        <h2>WAT Session History</h2>
       </div>
       <div class="history-list" id="history-list">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- ==================== HISTORY SCREEN (TAT) ==================== -->
+    <div class="screen" id="screen-history-tat">
+      <div class="history-header">
+        <button class="btn-back" id="btn-back-history-tat" onclick="showScreen('home-tat')">← Back</button>
+        <h2>TAT Session History</h2>
+      </div>
+      <div class="history-list" id="history-list-tat">
         <!-- populated by JS -->
       </div>
     </div>
@@ -278,5 +486,6 @@
   </div><!-- /app -->
 
   <script src="app.js"></script>
+  <script src="tat.js"></script>
 </body>
 </html>
