@@ -81,11 +81,24 @@
 
         <!-- File Upload Widget -->
         <div class="upload-widget">
-          <div class="upload-dropzone" id="upload-dropzone">
-            <span class="upload-icon">📂</span>
-            <span class="upload-label">Drop a <strong>.txt</strong> word list file here, or <u>click to browse</u></span>
-            <input type="file" id="word-file-input" accept=".txt,.text" style="display:none" />
+          <div class="upload-tabs">
+            <button class="upload-tab-btn active" id="tab-btn-file">📂 File Upload</button>
+            <button class="upload-tab-btn" id="tab-btn-manual">⌨ Manual Input</button>
           </div>
+          
+          <div id="mode-file-content">
+            <div class="upload-dropzone" id="upload-dropzone">
+              <span class="upload-icon">📂</span>
+              <span class="upload-label">Drop a <strong>.txt</strong> word list file here, or <u>click to browse</u></span>
+              <input type="file" id="word-file-input" accept=".txt,.text" style="display:none" />
+            </div>
+          </div>
+
+          <div id="mode-manual-content" style="display: none;">
+            <textarea id="manual-words-input" placeholder="Type or paste words here... (separated by commas, lines, or spaces)"></textarea>
+            <button class="btn-primary" id="btn-save-manual" style="width: 100%; justify-content: center; margin-top: 10px; padding: 12px;">Apply Words</button>
+          </div>
+
           <div class="upload-footer">
             <span class="upload-badge" id="upload-badge">No file loaded — using default word bank</span>
             <button class="btn-clear-upload" id="btn-clear-upload" style="display:none">✕ Clear</button>
