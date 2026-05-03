@@ -172,8 +172,8 @@ function handleWordFileUpload(file) {
   const reader = new FileReader();
   reader.onload = (e) => {
     const unique = parseWordList(e.target.result);
-    if (unique.length < 5) {
-      alert('Could not find enough valid words in the file. Please check the format.');
+    if (unique.length < 1) {
+      alert('Could not find any valid words in the file. Please check the format.');
       return;
     }
     customWords = unique;
@@ -188,8 +188,8 @@ function handleWordFileUpload(file) {
 function handleManualWordInput() {
   const text = document.getElementById('manual-words-input').value;
   const unique = parseWordList(text);
-  if (unique.length < 5) {
-    alert('Please enter at least 5 valid words.');
+  if (unique.length < 1) {
+    alert('Please enter at least one valid word.');
     return;
   }
   customWords = unique;
@@ -229,13 +229,28 @@ function clearUpload() {
 
 // ==================== SESSION ====================
 function startSession() {
-  // Use custom words if uploaded, otherwise default bank
-  const pool = customWords.length >= 5 ? customWords : ALL_WORDS;
+  let pool = [];
+  if (customWords.length > 0) {
+    // Start with custom words
+    pool = [...customWords];
+    // If fewer than 60, pad with random default words
+    if (pool.length < 60) {
+      const remainingCount = 60 - pool.length;
+      const defaultPool = ALL_WORDS.filter(w => !pool.includes(w));
+      const shuffledDefault = defaultPool.sort(() => Math.random() - 0.5);
+      pool = [...pool, ...shuffledDefault.slice(0, remainingCount)];
+    }
+  } else {
+    // Just use default bank
+    pool = [...ALL_WORDS];
+  }
+
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  sessionWords = shuffled.slice(0, Math.min(60, shuffled.length));
+  sessionWords = shuffled.slice(0, 60);
+  
   currentWordIndex = 0;
   isPaused = false;
-  showScreen('session');
+  showScreen('session-wat');
   startCountdown();
 }
 
@@ -340,7 +355,7 @@ function resumeSession() {
 function endSession() {
   clearInterval(timerInterval);
   buildReviewScreen();
-  showScreen('review');
+  showScreen('review-wat');
 }
 
 // ==================== FOCUS MODE ====================
@@ -378,8 +393,9 @@ function toggleAttempted(el) {
 
 function updateReviewStats() {
   const attempted = document.querySelectorAll('.review-word.attempted').length;
-  const skipped = 60 - attempted;
-  const pct = Math.round((attempted / 60) * 100);
+  const total = sessionWords.length;
+  const skipped = total - attempted;
+  const pct = Math.round((attempted / total) * 100);
   document.getElementById('rs-attempted').textContent = attempted;
   document.getElementById('rs-skipped').textContent = skipped;
   document.getElementById('rs-percent').textContent = pct + '%';
@@ -391,12 +407,13 @@ function selectAll() {
 }
 
 function submitReview() {
-  const attempted = document.querySelectorAll('.review-word.attempted').length;
-  const pct = Math.round((attempted / 60) * 100);
+  const attemptedCount = document.querySelectorAll('.review-word.attempted').length;
+  const total = sessionWords.length;
+  const pct = Math.round((attemptedCount / total) * 100);
   const entry = {
     date: new Date().toISOString(),
-    score: attempted,
-    total: 60,
+    score: attemptedCount,
+    total: total,
     percent: pct,
     words: sessionWords,
     attempted: [...document.querySelectorAll('.review-word.attempted')].map(e => parseInt(e.dataset.idx))
@@ -404,7 +421,7 @@ function submitReview() {
   sessionHistory.push(entry);
   localStorage.setItem('wat_history', JSON.stringify(sessionHistory));
   buildAnalysisScreen(entry);
-  showScreen('analysis');
+  showScreen('analysis-wat');
 }
 
 // ==================== ANALYSIS ====================
@@ -682,9 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-start').addEventListener('click', startSession);
   document.getElementById('btn-history').addEventListener('click', () => {
     buildHistoryScreen();
-    showScreen('history');
+    showScreen('history-wat');
   });
-  document.getElementById('btn-back-history').addEventListener('click', () => showScreen('home'));
+  document.getElementById('btn-back-history').addEventListener('click', () => showScreen('home-wat'));
 
   document.getElementById('btn-pause').addEventListener('click', pauseSession);
   document.getElementById('btn-resume').addEventListener('click', resumeSession);
@@ -695,13 +712,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trim to words seen so far (include current word), then go to review
     sessionWords = sessionWords.slice(0, currentWordIndex + 1);
     buildReviewScreen();
-    showScreen('review');
+    showScreen('review-wat');
   });
 
   document.getElementById('btn-discard-session').addEventListener('click', () => {
     clearInterval(timerInterval);
     document.getElementById('pause-modal').classList.add('hidden');
-    showScreen('home');
+    showScreen('home-wat');
     updateHomeStats();
   });
 
@@ -725,22 +742,22 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-new-session').addEventListener('click', () => {
     updateHomeStats();
     switchTab('results'); // reset tab
-    showScreen('home');
+    showScreen('home-wat');
   });
   document.getElementById('btn-view-history').addEventListener('click', () => {
     buildHistoryScreen();
-    showScreen('history');
+    showScreen('history-wat');
   });
 
   document.addEventListener('keydown', e => {
     if (isCountdownMode) return;
     if (e.key === 'Escape' && isFocusMode) exitFocusMode();
-    if (e.key === 'Escape' && !isFocusMode && !isPaused && document.getElementById('screen-session').classList.contains('active')) pauseSession();
-    if ((e.key === 'ArrowRight' || e.key === ' ') && document.getElementById('screen-session').classList.contains('active') && !isPaused && !isFocusMode) {
+    if (e.key === 'Escape' && !isFocusMode && !isPaused && document.getElementById('screen-session-wat').classList.contains('active')) pauseSession();
+    if ((e.key === 'ArrowRight' || e.key === ' ') && document.getElementById('screen-session-wat').classList.contains('active') && !isPaused && !isFocusMode) {
       e.preventDefault();
       clearInterval(timerInterval);
       nextWord();
     }
-    if (e.key === 'f' && document.getElementById('screen-session').classList.contains('active') && !isFocusMode) enterFocusMode();
+    if (e.key === 'f' && document.getElementById('screen-session-wat').classList.contains('active') && !isFocusMode) enterFocusMode();
   });
 });
