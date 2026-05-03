@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CDS WAT Practice | Word Association Test</title>
+  <meta name="description" content="Practice Word Association Test (WAT) for CDS/SSB exam. 60 words in 15 seconds each with scoring and performance analysis." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- BACKGROUND -->
+  <div class="bg-overlay"></div>
+  <div class="bg-image"></div>
+  <div class="bg-particles" id="particles"></div>
+
+  <!-- APP WRAPPER -->
+  <div class="app" id="app">
+
+    <!-- ==================== HOME SCREEN ==================== -->
+    <div class="screen active" id="screen-home">
+      <div class="home-content">
+        <div class="emblem-ring">
+          <div class="emblem-inner">
+            <svg viewBox="0 0 80 80" class="emblem-svg">
+              <polygon points="40,5 47,30 74,30 52,47 60,72 40,55 20,72 28,47 6,30 33,30" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+              <circle cx="40" cy="40" r="15" fill="none" stroke="#d4af37" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+        <div class="home-badge">SSB PREPARATION SUITE</div>
+        <h1 class="home-title">WAT <span class="gold">Practice</span></h1>
+        <p class="home-subtitle">Word Association Test — CDS / SSB Edition</p>
+        <p class="home-desc">60 random words · 15 seconds each · Instant scoring · Performance analytics</p>
+
+        <div class="home-stats" id="home-stats">
+          <div class="stat-card" id="stat-sessions">
+            <span class="stat-num" id="stat-sessions-val">0</span>
+            <span class="stat-label">Sessions</span>
+          </div>
+          <div class="stat-card" id="stat-best">
+            <span class="stat-num" id="stat-best-val">—</span>
+            <span class="stat-label">Best Score</span>
+          </div>
+          <div class="stat-card" id="stat-avg">
+            <span class="stat-num" id="stat-avg-val">—</span>
+            <span class="stat-label">Average</span>
+          </div>
+        </div>
+
+        <!-- File Upload Widget -->
+        <div class="upload-widget">
+          <div class="upload-dropzone" id="upload-dropzone">
+            <span class="upload-icon">📂</span>
+            <span class="upload-label">Drop a <strong>.txt</strong> word list file here, or <u>click to browse</u></span>
+            <input type="file" id="word-file-input" accept=".txt,.text" style="display:none" />
+          </div>
+          <div class="upload-footer">
+            <span class="upload-badge" id="upload-badge">No file loaded — using default word bank</span>
+            <button class="btn-clear-upload" id="btn-clear-upload" style="display:none">✕ Clear</button>
+          </div>
+        </div>
+
+        <div class="home-actions">
+          <button class="btn-primary" id="btn-start">
+            <span class="btn-icon">▶</span> Start Session
+          </button>
+          <button class="btn-secondary" id="btn-history">
+            <span class="btn-icon">📊</span> History
+          </button>
+        </div>
+
+        <div class="home-rules">
+          <h3>How It Works</h3>
+          <div class="rules-grid">
+            <div class="rule-item"><span class="rule-num">01</span><span>60 words shown one at a time</span></div>
+            <div class="rule-item"><span class="rule-num">02</span><span>15 seconds per word</span></div>
+            <div class="rule-item"><span class="rule-num">03</span><span>Write your first thought instantly</span></div>
+            <div class="rule-item"><span class="rule-num">04</span><span>Mark attempted words at the end</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SESSION SCREEN ==================== -->
+    <div class="screen" id="screen-session">
+      <!-- Top HUD -->
+      <div class="session-hud">
+        <div class="hud-left">
+          <span class="hud-label">WORD</span>
+          <span class="hud-val" id="hud-word-num">1 / 60</span>
+        </div>
+        <div class="hud-center">
+          <div class="timer-ring" id="timer-ring">
+            <svg viewBox="0 0 120 120" class="timer-svg">
+              <circle cx="60" cy="60" r="54" class="timer-track"/>
+              <circle cx="60" cy="60" r="54" class="timer-progress" id="timer-progress"/>
+            </svg>
+            <div class="timer-display">
+              <span id="timer-val">15</span>
+              <span class="timer-unit">sec</span>
+            </div>
+          </div>
+        </div>
+        <div class="hud-right">
+          <button class="btn-pause" id="btn-pause" title="Pause">⏸</button>
+          <button class="btn-quit" id="btn-quit" title="Quit">✕</button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="session-progress-bar">
+        <div class="session-progress-fill" id="session-progress-fill"></div>
+      </div>
+
+      <!-- Word Display -->
+      <div class="word-stage" id="word-stage">
+        <div class="word-number" id="word-number">#01</div>
+        <div class="word-card" id="word-card">
+          <div class="word-glow"></div>
+          <div class="word-text" id="word-text">LEADER</div>
+        </div>
+        <p class="word-hint">Write the first thought that comes to your mind</p>
+      </div>
+
+      <!-- Countdown Overlay -->
+      <div class="countdown-overlay hidden" id="countdown-overlay">
+        <div class="countdown-content">
+          <h2 class="countdown-title">Get Ready</h2>
+          <div class="countdown-number" id="countdown-number">5</div>
+        </div>
+      </div>
+
+      <!-- Focus Mode Overlay -->
+      <div class="focus-overlay hidden" id="focus-overlay">
+        <div class="focus-word" id="focus-word">LEADER</div>
+        <div class="focus-timer" id="focus-timer">15</div>
+        <div class="focus-hint">Press <kbd>Esc</kbd> to exit focus mode</div>
+      </div>
+
+      <!-- Bottom Controls -->
+      <div class="session-bottom">
+        <button class="btn-focus" id="btn-focus" title="Focus Mode">
+          <span>⛶</span> Focus Mode
+        </button>
+        <button class="btn-next" id="btn-next">
+          Next Word <span>→</span>
+        </button>
+      </div>
+
+      <!-- Pause Modal -->
+      <div class="modal-overlay hidden" id="pause-modal">
+        <div class="modal-box">
+          <div class="modal-icon">⏸</div>
+          <h2>Session Paused</h2>
+          <p>What would you like to do?</p>
+          <div class="modal-actions">
+            <button class="btn-primary" id="btn-resume">▶ Resume</button>
+            <button class="btn-danger" id="btn-quit-confirm">⏹ End &amp; Score</button>
+            <button class="btn-discard" id="btn-discard-session">✕ Discard</button>
+          </div>
+          <p class="modal-note"><strong>End &amp; Score</strong> — go to review with words seen so far<br><strong>Discard</strong> — quit without saving anything</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== REVIEW SCREEN ==================== -->
+    <div class="screen" id="screen-review">
+      <div class="review-header">
+        <div class="review-badge">SESSION COMPLETE</div>
+        <h2>Mark Your Attempts</h2>
+        <p>Check the words you managed to write a response for</p>
+      </div>
+
+      <div class="review-grid" id="review-grid">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="review-summary">
+        <div class="rs-stat">
+          <span class="rs-num" id="rs-attempted">0</span>
+          <span class="rs-label">Attempted</span>
+        </div>
+        <div class="rs-stat">
+          <span class="rs-num" id="rs-skipped">60</span>
+          <span class="rs-label">Skipped</span>
+        </div>
+        <div class="rs-stat">
+          <span class="rs-num" id="rs-percent">0%</span>
+          <span class="rs-label">Score</span>
+        </div>
+      </div>
+
+      <div class="review-actions">
+        <button class="btn-secondary" id="btn-select-all">Select All</button>
+        <button class="btn-primary" id="btn-submit-review">Submit & See Analysis</button>
+      </div>
+    </div>
+
+    <!-- ==================== ANALYSIS SCREEN ==================== -->
+    <div class="screen" id="screen-analysis">
+      <div class="analysis-header">
+        <div class="analysis-badge">PERFORMANCE ANALYSIS</div>
+        <h2>Session Results</h2>
+      </div>
+
+      <!-- Tab Bar -->
+      <div class="analysis-tabs">
+        <button class="analysis-tab-btn active" data-tab="results">📊 Results</button>
+        <button class="analysis-tab-btn" data-tab="answers">💡 Model Answers</button>
+      </div>
+
+      <!-- ===== RESULTS TAB ===== -->
+      <div class="analysis-tab-panel active" id="tab-results">
+        <div class="analysis-score-hero">
+          <div class="score-circle" id="score-circle">
+            <svg viewBox="0 0 200 200" class="score-svg">
+              <circle cx="100" cy="100" r="85" class="score-track"/>
+              <circle cx="100" cy="100" r="85" class="score-arc" id="score-arc"/>
+            </svg>
+            <div class="score-inner">
+              <span class="score-big" id="score-big">0</span>
+              <span class="score-of">/ 60</span>
+              <span class="score-pct" id="score-pct">0%</span>
+            </div>
+          </div>
+          <div class="score-grade" id="score-grade">
+            <span class="grade-letter" id="grade-letter">—</span>
+            <span class="grade-label" id="grade-label">Keep Practicing</span>
+          </div>
+        </div>
+
+        <div class="comparison-section" id="comparison-section">
+          <h3>📈 Progress Comparison</h3>
+          <div class="comparison-bars" id="comparison-bars"></div>
+        </div>
+
+        <div class="trend-section">
+          <h3>📊 Score Trend</h3>
+          <div class="trend-chart-wrap">
+            <canvas id="trend-chart" width="700" height="180"></canvas>
+          </div>
+        </div>
+
+        <div class="breakdown-section">
+          <h3>📋 Word Breakdown</h3>
+          <div class="breakdown-grid" id="breakdown-grid"></div>
+        </div>
+      </div>
+
+      <!-- ===== ANSWERS TAB ===== -->
+      <div class="analysis-tab-panel" id="tab-answers">
+        <div class="answers-intro">
+          <p>These are <strong>model WAT responses</strong> — use them to benchmark and improve your own answers. The ideal response is positive, action-oriented, and reflects OLQ traits.</p>
+        </div>
+        <div class="answers-grid" id="answers-grid"></div>
+      </div>
+
+      <div class="analysis-actions">
+        <button class="btn-primary" id="btn-new-session">New Session</button>
+        <button class="btn-secondary" id="btn-view-history">View All History</button>
+      </div>
+    </div>
+
+    <!-- ==================== HISTORY SCREEN ==================== -->
+    <div class="screen" id="screen-history">
+      <div class="history-header">
+        <button class="btn-back" id="btn-back-history">← Back</button>
+        <h2>Session History</h2>
+      </div>
+      <div class="history-list" id="history-list">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+  </div><!-- /app -->
+
+  <script src="app.js"></script>
+</body>
+</html>
