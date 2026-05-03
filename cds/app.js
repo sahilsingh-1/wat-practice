@@ -151,25 +151,27 @@ function updateHomeStats() {
   }
 }
 
-// ==================== FILE UPLOAD ====================
+// ==================== FILE & MANUAL UPLOAD ====================
+function parseWordList(text) {
+  const raw = text.split(/[\n\r,\t]+/);
+  const parsed = [];
+  raw.forEach(line => {
+    // Remove leading numbers like "1." "1)" "1:"
+    const cleaned = line.replace(/^\s*\d+[.):\-\s]+/, '').trim();
+    // Remove trailing _1 _2 style suffixes
+    const word = cleaned.replace(/_\d+$/, '').trim();
+    if (word.length > 1 && word.length < 40 && /^[A-Za-z\s]+$/.test(word)) {
+      parsed.push(word);
+    }
+  });
+  return [...new Set(parsed.map(w => w.trim()).filter(Boolean))];
+}
+
 function handleWordFileUpload(file) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = (e) => {
-    const text = e.target.result;
-    // Extract words: split by newlines/commas/tabs, strip numbers & punctuation
-    const raw = text.split(/[\n\r,\t]+/);
-    const parsed = [];
-    raw.forEach(line => {
-      // Remove leading numbers like "1." "1)" "1:"
-      const cleaned = line.replace(/^\s*\d+[.):\-\s]+/, '').trim();
-      // Remove trailing _1 _2 style suffixes from the provided list
-      const word = cleaned.replace(/_\d+$/, '').trim();
-      if (word.length > 1 && word.length < 40 && /^[A-Za-z\s]+$/.test(word)) {
-        parsed.push(word);
-      }
-    });
-    const unique = [...new Set(parsed.map(w => w.trim()).filter(Boolean))];
+    const unique = parseWordList(e.target.result);
     if (unique.length < 5) {
       alert('Could not find enough valid words in the file. Please check the format.');
       return;
@@ -181,6 +183,39 @@ function handleWordFileUpload(file) {
     document.getElementById('btn-clear-upload').style.display = 'inline-flex';
   };
   reader.readAsText(file);
+}
+
+function handleManualWordInput() {
+  const text = document.getElementById('manual-words-input').value;
+  const unique = parseWordList(text);
+  if (unique.length < 5) {
+    alert('Please enter at least 5 valid words.');
+    return;
+  }
+  customWords = unique;
+  const badge = document.getElementById('upload-badge');
+  badge.textContent = `✓ ${unique.length} words loaded manually`;
+  badge.classList.add('loaded');
+  document.getElementById('btn-clear-upload').style.display = 'inline-flex';
+}
+
+function switchUploadMode(mode) {
+  const modeFile = document.getElementById('mode-file-content');
+  const modeManual = document.getElementById('mode-manual-content');
+  const btnFile = document.getElementById('tab-btn-file');
+  const btnManual = document.getElementById('tab-btn-manual');
+
+  if (mode === 'file') {
+    modeFile.style.display = 'block';
+    modeManual.style.display = 'none';
+    btnFile.classList.add('active');
+    btnManual.classList.remove('active');
+  } else {
+    modeFile.style.display = 'none';
+    modeManual.style.display = 'block';
+    btnFile.classList.remove('active');
+    btnManual.classList.add('active');
+  }
 }
 
 function clearUpload() {
@@ -638,6 +673,11 @@ document.addEventListener('DOMContentLoaded', () => {
     handleWordFileUpload(e.dataTransfer.files[0]);
   });
   dropzone.addEventListener('click', () => fileInput.click());
+
+  // Mode switching
+  document.getElementById('tab-btn-file').addEventListener('click', () => switchUploadMode('file'));
+  document.getElementById('tab-btn-manual').addEventListener('click', () => switchUploadMode('manual'));
+  document.getElementById('btn-save-manual').addEventListener('click', handleManualWordInput);
 
   document.getElementById('btn-start').addEventListener('click', startSession);
   document.getElementById('btn-history').addEventListener('click', () => {
